@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://skgroupx.com/sitemap.xml

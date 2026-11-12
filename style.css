@@ -531,3 +531,42 @@ dialog::backdrop { background:#080604bf; backdrop-filter:blur(4px) }
   .account-card { grid-template-columns:1fr }
   .account-brand { width:min(230px,100%) }
 }
+
+/* Customer journeys, mobile navigation and responsive enquiry form. */
+.menu { align-items:center; gap:7px; color:var(--gold); padding:0 9px; border:1px solid #715536; border-radius:6px }
+.menu:not([hidden]) { display:inline-flex }
+.menu-icon { display:grid; gap:4px; width:17px }
+.menu-icon i { height:1px; width:100%; background:currentColor; display:block; transition:transform .22s ease,opacity .22s ease }
+.menu[aria-expanded=true] i:first-child { transform:translateY(5px) rotate(45deg) }
+.menu[aria-expanded=true] i:nth-child(2) { opacity:0 }
+.menu[aria-expanded=true] i:last-child { transform:translateY(-5px) rotate(-45deg) }
+.button { transition:transform .2s ease,box-shadow .2s ease,filter .2s ease }
+.button:is(:hover,:focus-visible) { transform:translateY(-2px); filter:brightness(1.11) }
+.button:active { transform:translateY(1px) scale(.985) }
+.button span { transition:transform .2s ease }
+.button:is(:hover,:focus-visible) span { transform:translate(2px,-2px) }
+.form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px }
+.group-dialog { width:min(610px,calc(100% - 24px)) }
+.form-extras { border:1px solid var(--line); border-radius:4px; padding:7px 10px }
+.form-extras summary { cursor:pointer; color:var(--gold); font-size:13px }
+.form-extras[open] .form-grid { margin-top:8px }
+.sector-guide { margin:38px 0 25px }
+.sector-guide>h2 { font:400 clamp(26px,4vw,43px)/1.1 var(--display); margin-bottom:18px }
+.sector-guide h3 { margin:0 0 8px }
+.provider-mark { width:21px; height:21px; display:inline-grid; place-items:center; margin-right:6px; vertical-align:middle; font-weight:800 }
+.account-providers button:not(:disabled) { cursor:pointer; border-color:var(--gold) }
+.account-providers button:disabled { opacity:.64 }
+@media(max-width:900px) {
+  .header-wrap { min-height:60px; position:relative; grid-template-columns:1fr auto; gap:8px }
+  .header-wrap:has(.menu:not([hidden])) { grid-template-columns:1fr auto auto }
+  .header-wrap .brand-symbol.brand-logo { width:clamp(115px,29vw,180px) }
+  .header-button { font-size:11px; padding-inline:9px }
+  .js .nav { display:none; position:absolute; top:100%; left:0; right:0; padding:12px; background:#14100d; border:1px solid #765635; border-radius:0 0 8px 8px; max-height:calc(100dvh - 70px); overflow:auto; align-items:stretch }
+  .js .nav.open { display:flex; flex-direction:column }
+  .js .nav a { padding:10px; min-height:44px }
+}
+@media(max-width:390px) { .form-grid { grid-template-columns:1fr } }
+@media(prefers-reduced-motion:reduce) {
+  .menu-icon i,.button,.button span { transition:none }
+  .button:is(:hover,:focus-visible,:active),.button:is(:hover,:focus-visible) span { transform:none }
+}

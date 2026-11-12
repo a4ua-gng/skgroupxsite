@@ -9,7 +9,7 @@
 
   const menu = $('.menu');
   const nav = $('#nav');
-  const mobile = matchMedia('(max-width:720px)');
+  const mobile = matchMedia('(max-width:900px)');
   function closeMenu() {
     nav.classList.remove('open');
     menu.setAttribute('aria-expanded', 'false');
@@ -24,6 +24,9 @@
     mobile.addEventListener('change', syncMenu);
     menu.addEventListener('click', () => {
       menu.setAttribute('aria-expanded', String(nav.classList.toggle('open')));
+    });
+    document.addEventListener('pointerdown', event => {
+      if (nav.classList.contains('open') && !nav.contains(event.target) && !menu.contains(event.target)) closeMenu();
     });
     nav.addEventListener('click', event => {
       if (event.target.closest('a')) closeMenu();
@@ -218,8 +221,23 @@
       }
       const business = fields.get('business');
       const lines = ['Hello SK Group X,', '', 'Business: ' + business, 'Name: ' + name.value.trim()];
-      const reply = fields.get('reply').trim();
-      if (reply) lines.push('Contact: ' + reply);
+      const phone = form.elements.namedItem('phone');
+      const digits = phone.value.replace(/[^0-9]/g, '');
+      if (digits.length < 8 || digits.length > 15 || !/^\+?[0-9 ()-]+$/.test(phone.value.trim())) {
+        phone.setCustomValidity('Enter a valid mobile number, with country code if outside India.');
+        phone.reportValidity();
+        return;
+      }
+      const email = form.elements.namedItem('email');
+      if (fields.get('reply') === 'Email' && !email.value.trim()) {
+        email.setCustomValidity('Enter an email address or choose a different way to hear back.');
+        email.reportValidity();
+        return;
+      }
+      for (const [key, label] of Object.entries({phone:'Mobile', email:'Email', city:'Town or district', purpose:'Enquiry type', reply:'Preferred reply', item:'Product or service', date:'Preferred date', company:'Organisation', budget:'Budget range'})) {
+        const val = fields.get(key)?.trim();
+        if (val) lines.push(label + ': ' + val);
+      }
       lines.push('', message.value.trim());
       const body = encodeURIComponent(lines.join('\n'));
       const status = $('.form-status', form);
@@ -240,6 +258,7 @@
     });
     form.addEventListener('input', event => {
       event.target.setCustomValidity?.('');
+      if (event.target.name === 'reply') form.elements.namedItem('email').setCustomValidity('');
       $('.form-status', form).replaceChildren();
     });
   }
